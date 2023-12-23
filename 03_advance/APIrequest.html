@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body style="background-color: whitesmoke;">
+    <h1>XMLHttpRequest: readyState property</h1>
+    <table>
+        <tr>
+          <th>Value</th>
+          <th>State</th>
+          <th>Description</th>
+        </tr>
+        <tr>
+          <td>0</td>
+          <td>UNSENT</td>
+          <td>Client has been created. open() not called yet.</td>
+        </tr>
+        <tr>
+          <td>1</td>
+          <td>OPENED</td>
+          <td>open() has been called.</td>
+        </tr>
+        <tr>
+            <td>2</td>
+            <td>HEADERS_RECEIVED</td>
+            <td>send() has been called, and headers and status are available.</td>
+          </tr>
+          <tr>
+            <td>3</td>
+            <td>LOADING</td>
+            <td>Downloading; responseText holds partial data.</td>
+          </tr>
+          <tr>
+            <td>4</td>
+            <td>DONE</td>
+            <td>The operation is complete.</td>
+          </tr>
+      </table>
+      <form>
+        <label for="fname">GitHub User Name:</label><br>
+         <input type="text" id="fname" name="fname"><br>
+        <button>Submit</button>
+      </form>
+    <img id="profilePhoto" src="" alt="">
+    <h2 id="name"></h2>
+    <h2 id="followers"></h2>
+</body>
+<script>
+    const form = document.querySelector('form')
+    form.addEventListener('submit', function(e){
+        e.preventDefault()
+        const UserName = String(document.querySelector('#fname').value)
+        console.log(UserName)
+    const xhr = new XMLHttpRequest()
+    requestURL = `https://api.github.com/users/${UserName}`
+    xhr.open('GET', requestURL)
+    xhr.onreadystatechange = function(){
+        // console.log(xhr.readyState)
+        if (xhr.readyState == 4){
+            const data = JSON.parse(this.responseText)
+            // console.log(data)
+            document.querySelector('#profilePhoto').src = data.avatar_url
+            document.querySelector('#name').innerHTML = `Name: ${data.name}`
+            document.querySelector('#followers').innerHTML = `Followers: ${data.followers}`
+        }
+    }
+    xhr.send()
+    })
+    
+</script>
+</html>
